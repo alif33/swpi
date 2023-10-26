@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { romanize } from "./Formattor"
+import Rating from "./components/Rating"
 
 function App() {
   const [movies, setMovies] = useState([])
@@ -58,20 +59,27 @@ const fetchInfo = __d__ =>{
       </div>
       <div className="h-screen grid grid-cols-2">
         <div className="border-r">
-          <ul>
-              { movies.map((item, index)=><li key={index} className="border-b">
-                <span 
-                  className={`flex justify-between pl-7 pr-3 py-3 cursor-pointer ${item.title === active?.title && "bg-slate-200"}`}
-                  onClick={()=>handleActive(item)}
-                >
-                  <span className="flex gap-7">
-                    <h5>EPISODE {item.episode_id}</h5> 
-                    <h3 className="">EPISODE {romanize(item.episode_id)} - {item.title}</h3>
-                  </span>
-                  <h5>{item.release_date}</h5>
-                </span>
-            </li>)}
-          </ul>
+          <table className="w-full">
+            <tbody>
+              { movies.map((item, index)=><tr 
+                key={index} 
+                className={`flex justify-between pl-7 pr-3 py-3 cursor-pointer border-b ${item.title === active?.title && "bg-slate-200"}`}
+                onClick={()=>handleActive(item)}
+              >
+                  <td><h5>EPISODE {item.episode_id}</h5></td> 
+                  <td><h3 className="">EPISODE {romanize(item.episode_id)} - {item.title}</h3></td> 
+                  <td>
+                    <span className="float-right">
+                      <Rating
+                        title={item.title}
+                        date={item.release_date}
+                      />
+                    </span>
+                  </td>
+                  <td><h5>{item.release_date}</h5></td>
+            </tr>)}
+            </tbody>
+          </table>
         </div>
         <div className="border-l pt-4 pl-3">
           <h2 className="text-2xl">EPISODE {romanize(active?.episode_id)} - {active? active.title: "The Empire Strikes Back"}</h2>
